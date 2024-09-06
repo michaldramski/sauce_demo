@@ -70,14 +70,18 @@ test.describe('Shopping tests', () => {
                 .toContain(messages.checkout.postal_code_error);
         });
 
-        // eslint-disable-next-line playwright/no-skipped-test
-        test.skip('Should be able to complete order', async () => {
+        test('Should be able to complete order', async () => {
             // Arrange
+            const expectedHeaderText = 'Thank you for your order!';
+            const expectedMessageText =
+                'Your order has been dispatched, and will arrive just as fast as the pony can get there!';
+
             await pm.checkoutInformationPage.pageReady();
             // Act
             await pm.checkoutInformationPage.fillFirstName(
                 faker.person.firstName(),
             );
+
             await pm.checkoutInformationPage.fillLastName(
                 faker.person.lastName(),
             );
@@ -85,8 +89,14 @@ test.describe('Shopping tests', () => {
                 faker.location.zipCode(),
             );
             await pm.checkoutInformationPage.proceedToOverview();
+            await pm.checkoutOverviewPage.proceedToCompleteOrder();
+            const actualHeaderText =
+                await pm.checkoutCompletePage.getOrderCompleteHeaderText();
+            const actualMessageText =
+                await pm.checkoutCompletePage.getOrderCompleteText();
             // Assert
-            expect(1).toBe(1);
+            expect(actualHeaderText).toBe(expectedHeaderText);
+            expect(actualMessageText).toBe(expectedMessageText);
         });
     });
 });
