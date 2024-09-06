@@ -1,4 +1,5 @@
 import { Page } from '@playwright/test';
+import { fill_input } from '../actions/fill';
 
 export class CheckoutInformationPage {
     first_name_input = `[data-test="firstName"]`;
@@ -19,18 +20,15 @@ export class CheckoutInformationPage {
     }
 
     async fillFirstName(firstName: string): Promise<void> {
-        this.page.focus(this.first_name_input);
-        this.page.fill(this.first_name_input, firstName);
+        await fill_input(this.page, this.first_name_input, firstName);
     }
 
     async fillLastName(lastName: string): Promise<void> {
-        this.page.focus(this.last_name_input);
-        this.page.fill(this.last_name_input, lastName);
+        await fill_input(this.page, this.last_name_input, lastName);
     }
 
     async fillPostalCode(postalCode: string): Promise<void> {
-        this.page.focus(this.postal_code_input);
-        this.page.fill(this.postal_code_input, postalCode);
+        await fill_input(this.page, this.postal_code_input, postalCode);
     }
 
     async proceedToOverview(): Promise<void> {
