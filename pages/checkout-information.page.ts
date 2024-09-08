@@ -1,7 +1,10 @@
 import { Page } from '@playwright/test';
-import { fill_input } from '../actions/fill';
+import CommonActions from '../actions/CommonActions';
+import BasePage from './base.page';
 
-export class CheckoutInformationPage {
+export class CheckoutInformationPage extends BasePage {
+    actions: CommonActions;
+
     first_name_input = `[data-test="firstName"]`;
     last_name_input = `[data-test="lastName"]`;
     postal_code_input = `[data-test="postalCode"]`;
@@ -10,25 +13,21 @@ export class CheckoutInformationPage {
     checkout_title = `[data-test="title"]`;
     checkout_title_locator = this.page.locator(this.checkout_title);
 
-    constructor(private page: Page) {
-        this.page = page;
-    }
-
-    async pageReady(): Promise<void> {
-        await this.page.waitForLoadState('domcontentloaded');
-        await this.page.waitForLoadState('load');
+    constructor(protected page: Page) {
+        super(page);
+        this.actions = new CommonActions(this.page);
     }
 
     async fillFirstName(firstName: string): Promise<void> {
-        await fill_input(this.page, this.first_name_input, firstName);
+        await this.actions.fill(this.first_name_input, firstName);
     }
 
     async fillLastName(lastName: string): Promise<void> {
-        await fill_input(this.page, this.last_name_input, lastName);
+        await this.actions.fill(this.last_name_input, lastName);
     }
 
     async fillPostalCode(postalCode: string): Promise<void> {
-        await fill_input(this.page, this.postal_code_input, postalCode);
+        await this.actions.fill(this.postal_code_input, postalCode);
     }
 
     async proceedToOverview(): Promise<void> {

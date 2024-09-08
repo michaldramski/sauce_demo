@@ -11,12 +11,12 @@ test.describe('Shopping tests', () => {
     test.beforeEach(async ({ page }) => {
         // Arrange
         pm = new PagesManager(page);
-        await page.goto('');
+        await pm.loginPage.open();
         // Act
         await pm.loginPage.login(DefaultUser);
     });
 
-    test('Should add product (Sauce Labs Backpack) into basket and check if item is in basket', async ({}) => {
+    test('Should add product (Sauce Labs Backpack) into basket and check if item is in basket', async () => {
         // Arrange
         const selectedProduct = products[0].name; // Sauce Labs Backpack
         // Act
@@ -28,7 +28,7 @@ test.describe('Shopping tests', () => {
     });
 
     test.describe('Test Cases of Checkout', () => {
-        test.beforeEach(async ({}) => {
+        test.beforeEach(async () => {
             // Arrange
             const selectedProduct = products[1].name; // Sauce Labs Bike Light
             // Act
@@ -42,8 +42,6 @@ test.describe('Shopping tests', () => {
         });
 
         test('Should verify error messages for credentials in checkout', async () => {
-            // Arrange
-            await pm.checkoutInformationPage.pageReady();
             // Act
             await pm.checkoutInformationPage.proceedToOverview();
             // Assert
@@ -75,8 +73,6 @@ test.describe('Shopping tests', () => {
             const expectedHeaderText = 'Thank you for your order!';
             const expectedMessageText =
                 'Your order has been dispatched, and will arrive just as fast as the pony can get there!';
-
-            await pm.checkoutInformationPage.pageReady();
             // Act
             await pm.checkoutInformationPage.fillFirstName(
                 faker.person.firstName(),
@@ -99,4 +95,9 @@ test.describe('Shopping tests', () => {
             expect(actualMessageText).toBe(expectedMessageText);
         });
     });
+});
+
+test.afterAll(async () => {
+    // Act
+    await pm.loginPage.close();
 });

@@ -1,11 +1,12 @@
 import { Locator, Page } from '@playwright/test';
+import BasePage from './base.page';
 
-export class CartPage {
+export class CartPage extends BasePage {
     items_list_items_names = `[data-test="cart-list"] > .cart_item .inventory_item_name`;
     checkout_button = '[data-test="checkout"]';
 
-    constructor(private page: Page) {
-        this.page = page;
+    constructor(protected page: Page) {
+        super(page);
     }
 
     async getCartItemsNames(): Promise<string[]> {
@@ -25,7 +26,5 @@ export class CartPage {
 
     async proceedToCheckout(): Promise<void> {
         await this.page.click(this.checkout_button);
-        // eslint-disable-next-line playwright/no-wait-for-timeout
-        await this.page.waitForTimeout(1000);
     }
 }

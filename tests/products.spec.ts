@@ -13,7 +13,7 @@ test.describe('Products tests - sorting items', () => {
         const context = await browser.newContext();
         const page = await context.newPage();
         pm = new PagesManager(page);
-        await page.goto('');
+        await pm.loginPage.open();
         // Act
         await pm.loginPage.login(DefaultUser);
     });
@@ -53,4 +53,9 @@ test.describe('Products tests - sorting items', () => {
         // Assert
         expect(prices).toEqual(sortedPrices);
     });
+});
+
+test.afterAll(async () => {
+    // Act
+    await pm.loginPage.close();
 });

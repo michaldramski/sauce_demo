@@ -1,11 +1,12 @@
 import { Page } from '@playwright/test';
+import BasePage from './base.page';
 
-export class CheckoutCompletePage {
+export class CheckoutCompletePage extends BasePage {
     complete_header = `[data-test="complete-header"]`;
     complete_text = `[data-test="complete-text"]`;
 
-    constructor(private page: Page) {
-        this.page = page;
+    constructor(protected page: Page) {
+        super(page);
     }
 
     async getOrderCompleteHeaderText(): Promise<string> {

@@ -1,13 +1,16 @@
 import { Locator, Page } from '@playwright/test';
 import { CartMenu } from './cart-menu.component';
 import { SortOptionsType, SortOptionsEnum } from '../support/types';
+import BasePage from './base.page';
 
-export class ProductPage {
+export class ProductPage extends BasePage {
     cart_menu = new CartMenu(this.page);
 
     sort_dropdownlist = `[data-test="product-sort-container"]`;
     inventory_items_names = `[data-test="inventory-item-name"]`;
     inventory_items_prices = `[data-test="inventory-item-price"]`;
+
+    application_logo: Locator = this.page.locator('.app_logo');
 
     add_product_button = (product: string): Locator =>
         this.page
@@ -15,8 +18,8 @@ export class ProductPage {
             .filter({ hasText: product })
             .getByRole('button', { name: 'Add to cart' });
 
-    constructor(private page: Page) {
-        this.page = page;
+    constructor(protected page: Page) {
+        super(page);
     }
 
     async addProductIntoBasket(product: string): Promise<void> {
